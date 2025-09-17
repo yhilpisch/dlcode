@@ -1,0 +1,36 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+.venv/
+venv/
+ENV/
+env/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / Editors
+.DS_Store
+.idea/
+.vscode/
+
+# Data / Artifacts (optional)
+data/
+outputs/
+checkpoints/
+logs/
+
+# Node (if any notebooks use JS widgets)
+node_modules/
+package-lock.json
+package.json
