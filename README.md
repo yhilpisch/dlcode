@@ -7,6 +7,7 @@
 This repository accompanies the book “Deep Learning Basics with PyTorch”. It contains runnable Python scripts and Jupyter notebooks that mirror the book’s content and examples.
 
 - Book (HTML): https://hilpisch.com/tae/dl.html
+- Repository: https://github.com/yhilpisch/dlcode
 - Author: Dr. Yves J. Hilpisch — The Python Quants GmbH
 
 ## What’s Inside
@@ -60,7 +61,7 @@ jupyter lab
 - Install dependencies at the top of the notebook cell:
 
 ```python
-!pip -q install -r https://raw.githubusercontent.com/<YOUR-ORG>/<YOUR-REPO>/main/requirements.txt
+!pip -q install -r https://raw.githubusercontent.com/yhilpisch/dlcode/main/requirements.txt
 !pip -q install torch torchvision --index-url https://download.pytorch.org/whl/cu121  # or CPU index
 ```
 
@@ -75,10 +76,6 @@ Tips:
 - Reproducibility: examples set seeds where helpful; behavior may still vary across hardware/backends.
 - When adapting to your data, start from the minimal patterns (training loops, dataloaders) and iterate.
 
-## Updating This Repository
-
-If you are mirroring this code from the book’s manuscript repository, re‑run the export script there to update this repo (e.g., to pick up new/changed scripts and notebooks).
-
 ## Disclaimer
 
 This repository and its contents are provided for educational and illustrative purposes only and come without any warranty or guarantees of any kind—express or implied. Use at your own risk. The authors and The Python Quants GmbH are not responsible for any direct or indirect damages, losses, or issues arising from the use of this code. Do not use the provided examples for critical decision‑making, financial transactions, medical advice, or production deployments without rigorous review, testing, and validation.
@@ -89,5 +86,3 @@ Some examples may reference third‑party datasets, services, or APIs subject to
 
 - Email: team@tpq.io
 - Linktree: https://linktr.ee/dyjh
-- Quiz App: https://hilpisch.com:8000
-
