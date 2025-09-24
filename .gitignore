@@ -35,6 +35,6 @@ node_modules/
 package-lock.json
 package.json
 
-
-.executed/
+*/.executed
+*.swp
 *.pt
