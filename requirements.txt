@@ -3,3 +3,5 @@ matplotlib>=3.8
 scikit-learn>=1.4
 jupyterlab>=4.0
 ipykernel>=6.0
+ipywidgets>=8.0
+torch>=2.2

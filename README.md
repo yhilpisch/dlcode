@@ -39,7 +39,8 @@ pip install -r requirements.txt
 
 - Visit https://pytorch.org/get-started/locally/ and follow the selector for your OS, Python, CUDA/Metal/CPU.
 - Examples (subject to change; prefer the official selector):
-  - CPU‑only: `pip install torch --index-url https://download.pytorch.org/whl/cpu`
+  - CPU-only: `pip install torch --index-url https://download.pytorch.org/whl/cpu`
+  - Apple Silicon (Metal): `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu` *(see pytorch.org for the latest stable Metal wheel)*
   - CUDA 12.x: `pip install torch --index-url https://download.pytorch.org/whl/cu121`
 
 4) Run code and notebooks
