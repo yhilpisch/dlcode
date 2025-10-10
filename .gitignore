@@ -18,6 +18,7 @@ htmlcov/
 
 # Jupyter
 .ipynb_checkpoints/
+**/.executed/
 
 # OS / Editors
 .DS_Store
@@ -28,12 +29,10 @@ htmlcov/
 data/
 outputs/
 checkpoints/
+*.pt
 logs/
 
 # Node (if any notebooks use JS widgets)
 node_modules/
 package-lock.json
 package.json
-
-*.pt
-**/.executed
