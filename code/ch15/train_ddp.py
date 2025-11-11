@@ -63,10 +63,17 @@ class TinyNet(nn.Module):
         return self.net(x)
 
 
+def _distributed_env_present() -> bool:
+    return all(k in os.environ for k in ("RANK", "WORLD_SIZE", "LOCAL_RANK"))
+
+
 def setup_ddp() -> None:
-    if not dist.is_initialized():
-        dist.init_process_group("nccl")
-    torch.cuda.set_device(int(os.environ.get("LOCAL_RANK", 0)))
+    if dist.is_initialized() or not _distributed_env_present():
+        return
+    backend = "nccl" if torch.cuda.is_available() else "gloo"
+    dist.init_process_group(backend)
+    if torch.cuda.is_available():
+        torch.cuda.set_device(int(os.environ.get("LOCAL_RANK", 0)))
 
 
 def rank() -> int:
@@ -77,11 +84,12 @@ def is_main() -> bool:
     return rank() == 0
 
 
-def save_ckpt(path: Path, model: DDP, opt: torch.optim.Optimizer, epoch: int) -> None:
+def save_ckpt(path: Path, model: nn.Module, opt: torch.optim.Optimizer, epoch: int) -> None:
+    to_save = model.module if isinstance(model, DDP) else model
     if is_main():
         path.parent.mkdir(parents=True, exist_ok=True)
         torch.save({
-            "model": model.module.state_dict(),
+            "model": to_save.state_dict(),
             "opt": opt.state_dict(),
             "epoch": epoch,
         }, path)
@@ -89,12 +97,12 @@ def save_ckpt(path: Path, model: DDP, opt: torch.optim.Optimizer, epoch: int) ->
         dist.barrier()
 
 
-def load_ckpt(path: Path, model: DDP, opt: torch.optim.Optimizer) -> int:
+def load_ckpt(path: Path, model: nn.Module, opt: torch.optim.Optimizer) -> int:
     if not path.exists():
         return 0
-    maploc = {"cuda:%d" % 0: "cuda:%d" % torch.cuda.current_device()}
-    state = torch.load(path, map_location=maploc)
-    model.module.load_state_dict(state["model"])  # type: ignore[arg-type]
+    state = torch.load(path, map_location="cpu")
+    to_load = model.module if isinstance(model, DDP) else model
+    to_load.load_state_dict(state["model"])  # type: ignore[arg-type]
     opt.load_state_dict(state["opt"])  # type: ignore[arg-type]
     return int(state.get("epoch", 0)) + 1
 
@@ -104,8 +112,9 @@ def evaluate(model: nn.Module, loader: DataLoader) -> float:
     model.eval()
     correct, total = 0, 0
     for xb, yb in loader:
-        xb = xb.cuda(non_blocking=True)
-        yb = yb.cuda(non_blocking=True)
+        device = next(model.parameters()).device
+        xb = xb.to(device, non_blocking=True)
+        yb = yb.to(device, non_blocking=True)
         pred = model(xb).argmax(1)
         correct += (pred == yb).sum().item()
         total += yb.size(0)
@@ -122,14 +131,19 @@ def train(cfg: Config) -> None:
     loader = DataLoader(ds_train, batch_size=cfg.batch, sampler=sampler, shuffle=(sampler is None), num_workers=2, pin_memory=True)
     loader_val = DataLoader(ds_val, batch_size=1024, shuffle=False)
 
-    model = TinyNet().cuda()
-    model = DDP(model, device_ids=[torch.cuda.current_device()]) if dist.is_initialized() else model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = TinyNet().to(device)
+    if dist.is_initialized():
+        if device.type == "cuda":
+            model = DDP(model, device_ids=[torch.cuda.current_device()])
+        else:
+            model = DDP(model)
 
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr)
     loss_fn = nn.CrossEntropyLoss()
-    scaler = torch.cuda.amp.GradScaler(enabled=cfg.amp)
+    scaler = torch.cuda.amp.GradScaler(enabled=(cfg.amp and device.type == "cuda"))
 
-    start_epoch = load_ckpt(cfg.ckpt, model if isinstance(model, DDP) else DDP(model), opt)
+    start_epoch = load_ckpt(cfg.ckpt, model, opt)
 
     for epoch in range(start_epoch, cfg.epochs):
         if sampler is not None:
@@ -138,9 +152,9 @@ def train(cfg: Config) -> None:
         running = 0.0
         opt.zero_grad(set_to_none=True)
         for it, (xb, yb) in enumerate(loader):
-            xb = xb.cuda(non_blocking=True)
-            yb = yb.cuda(non_blocking=True)
-            with torch.cuda.amp.autocast(enabled=cfg.amp):
+            xb = xb.to(device, non_blocking=True)
+            yb = yb.to(device, non_blocking=True)
+            with torch.cuda.amp.autocast(enabled=(cfg.amp and device.type == "cuda")):
                 loss = loss_fn(model(xb), yb) / max(cfg.accum, 1)
             scaler.scale(loss).backward()
             if (it + 1) % cfg.accum == 0:
@@ -153,7 +167,7 @@ def train(cfg: Config) -> None:
         if is_main():
             acc = evaluate(model.module if isinstance(model, DDP) else model, loader_val)
             print(f"epoch {epoch}: loss={running/(it+1):.4f} val_acc={acc:.3f}")
-        save_ckpt(cfg.ckpt, model if isinstance(model, DDP) else DDP(model), opt, epoch)
+        save_ckpt(cfg.ckpt, model, opt, epoch)
 
     if dist.is_initialized():
         dist.destroy_process_group()
@@ -172,7 +186,7 @@ def parse_args() -> Config:
 
 
 if __name__ == "__main__":
-    torch.backends.cudnn.benchmark = True
+    if torch.cuda.is_available():
+        torch.backends.cudnn.benchmark = True
     cfg = parse_args()
     train(cfg)
-

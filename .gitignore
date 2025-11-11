@@ -5,6 +5,9 @@ __pycache__/
 .Python
 *.so
 .venv/
+*.png
+*.svg
+code/figures/figures/
 venv/
 ENV/
 env/
