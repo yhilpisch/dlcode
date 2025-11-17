@@ -20,19 +20,22 @@ def main() -> None:
     out = Path('figures/ch12_throughput_batch.svg')  # destination SVG path
     out.parent.mkdir(parents=True, exist_ok=True)  # ensure output directory exists
     batch_sizes = np.array([8, 16, 32, 64, 128, 256])  # toy batch sizes to plot
-    throughput = 800 * (1 - np.exp(-batch_sizes / 64.0)) + 100  # synthetic throughput curve
+    throughput = np.array([260, 470, 640, 740, 790, 795])  # synthetic throughput that plateaus
     fig, ax = plt.subplots(figsize=(6.4, 3.6))  # set up figure and axes
     ax.plot(batch_sizes, throughput, marker='o')  # plot samples/sec vs batch size
     ax.set_xscale('log', base=2)  # log-scale to highlight doubling behaviour
     ax.set_xlabel('Batch size')  # label x-axis
     ax.set_ylabel('Samples/sec')  # label y-axis
+    ax.set_ylim(0, 850)  # fix upper bound to highlight plateau
     ax.grid(True, alpha=0.3)  # add light grid for readability
     ax.set_title('Throughput vs batch size (toy)')  # chart title
     for x_value, y_value in zip(batch_sizes, throughput):  # annotate each point
-        ax.text(x_value, y_value + 8, f"{int(y_value)}", ha='center', fontsize=9)  # show numerical throughput
+        ax.text(x_value, y_value + 15, f"{int(y_value)}", ha='center', fontsize=9)  # show numerical throughput
     fig.tight_layout()  # minimize whitespace
     fig.savefig(out, format='svg')  # persist figure as SVG
-    print(f"Wrote {out}")  # log output path
+    png_path = out.with_suffix('.png')  # derive PNG path for beamer slides
+    fig.savefig(png_path, dpi=200)  # save PNG counterpart
+    print(f"Wrote {out} and {png_path}")  # log output paths
 
 
 if __name__ == '__main__':  # allow CLI invocation
