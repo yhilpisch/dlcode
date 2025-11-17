@@ -7,28 +7,36 @@ Chapter 12 — Cosine vs constant LR loss curves (SVG).
 
 Output: figures/ch12_cosine_schedule.svg
 """
-from __future__ import annotations
-from pathlib import Path
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-plt.style.use('seaborn-v0_8')
+from __future__ import annotations  # postponed evaluation of annotations
+from pathlib import Path  # filesystem utilities
+import numpy as np  # numerical routines for synthetic data
+import matplotlib  # base Matplotlib import
+matplotlib.use('Agg')  # render without display (CLI friendly)
+import matplotlib.pyplot as plt  # plotting API
+plt.style.use('seaborn-v0_8')  # consistent figure style
+
 
 def main() -> None:
-    out = Path('figures/ch12_cosine_schedule.svg'); out.parent.mkdir(parents=True, exist_ok=True)
-    epochs = np.arange(0, 100)
-    base = 1.0/(1+0.05*epochs) + 0.02*np.random.RandomState(0).randn(len(epochs))
-    const = base - 0.02
-    cos = (1.0+np.cos(np.pi*epochs/100.0))/2
-    loss_cos = 0.4*base* (0.5+0.5*cos)
-    fig, ax = plt.subplots(figsize=(6.0,3.6))
-    ax.plot(epochs, const, label='Constant LR', alpha=0.9)
-    ax.plot(epochs, loss_cos, label='Cosine schedule', alpha=0.9)
-    ax.set_xlabel('Epoch'); ax.set_ylabel('Loss (toy)'); ax.grid(True, alpha=0.3)
-    ax.legend(frameon=False); ax.set_title('Cosine vs constant LR (toy run)')
-    fig.tight_layout(); fig.savefig(out, format='svg'); print(f"Wrote {out}")
+    out = Path('figures/ch12_cosine_schedule.svg')  # output SVG path
+    out.parent.mkdir(parents=True, exist_ok=True)  # ensure directory exists
+    epochs = np.arange(0, 100)  # epoch indices for x-axis
+    rng = np.random.RandomState(0)  # seeded RNG for reproducibility
+    base = 1.0 / (1 + 0.05 * epochs) + 0.02 * rng.randn(len(epochs))  # toy decaying loss baseline
+    const_loss = base - 0.02  # simulated constant-LR trajectory
+    cosine_phase = (1.0 + np.cos(np.pi * epochs / 100.0)) / 2  # cosine modulation between 0 and 1
+    cosine_loss = 0.4 * base * (0.5 + 0.5 * cosine_phase)  # toy cosine-scheduled loss
+    fig, ax = plt.subplots(figsize=(6.0, 3.6))  # create figure
+    ax.plot(epochs, const_loss, label='Constant LR', alpha=0.9)  # plot constant schedule curve
+    ax.plot(epochs, cosine_loss, label='Cosine schedule', alpha=0.9)  # plot cosine schedule curve
+    ax.set_xlabel('Epoch')  # label x-axis
+    ax.set_ylabel('Loss (toy)')  # label y-axis
+    ax.grid(True, alpha=0.3)  # add light grid for readability
+    ax.legend(frameon=False)  # show legend without frame
+    ax.set_title('Cosine vs constant LR (toy run)')  # set plot title
+    fig.tight_layout()  # reduce whitespace
+    fig.savefig(out, format='svg')  # save figure to disk
+    print(f"Wrote {out}")  # log output location
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == '__main__':  # allow CLI invocation
+    main()  # generate figure
