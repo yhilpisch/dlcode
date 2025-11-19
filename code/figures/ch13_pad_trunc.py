@@ -28,13 +28,17 @@ def main() -> None:
     x0 = 0.9; max_len = 8
     ax.set_xlim(0.0, x0 + max_len + 0.2); ax.set_ylim(0, 3)
     row(ax, 2.0, ['good','movie'], max_len=max_len, x0=x0)
-    row(ax, 1.0, ['this','movie','is','good','!','indeed','great'], max_len=max_len, x0=x0)
+    # Truncate example: sequence longer than max_len; last tokens are dropped
+    row(ax, 1.0, ['this','movie','is','good','!','indeed','great','to','watch','today'],
+        max_len=max_len, x0=x0)
     row(ax, 0.0, ['bad'], max_len=max_len, x0=x0)
     # Row labels with margin to avoid overlap
     ax.text(0.2, 2.35, 'Pad', ha='left', va='bottom')
     ax.text(0.2, 1.35, 'Truncate', ha='left', va='bottom')
     ax.text(0.2, 0.35, 'Pad', ha='left', va='bottom')
-    fig.tight_layout(); fig.savefig(out, format='svg'); print(f"Wrote {out}")
+    fig.tight_layout(); fig.savefig(out, format='svg')
+    fig.savefig(out.with_suffix('.png'), dpi=200)
+    print(f"Wrote {out} and {out.with_suffix('.png')}")
 
 if __name__ == '__main__':
     main()
