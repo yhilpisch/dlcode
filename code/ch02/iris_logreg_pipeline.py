@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 2 — Iris classification with a scaler + logistic regression pipeline.
 
@@ -28,7 +28,7 @@ def main() -> None:
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.25, random_state=42, stratify=y
-        )
+    )
 
     pipe = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
     pipe.fit(X_train, y_train)
@@ -37,7 +37,9 @@ def main() -> None:
     acc = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {acc:.3f}")
 
-    ConfusionMatrixDisplay.from_predictions(y_test, y_pred, display_labels=iris.target_names)
+    ConfusionMatrixDisplay.from_predictions(
+        y_test, y_pred, display_labels=iris.target_names
+    )
     plt.tight_layout()
     plt.show()
 

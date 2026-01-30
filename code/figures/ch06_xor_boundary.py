@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 6 — XOR decision boundary: linear vs 2-layer MLP (SVG).
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -34,17 +35,20 @@ def train_mlp(X, y, hidden=8, lr=0.1, steps=2000):
     W2 = torch.randn(hidden, 2, requires_grad=True)
     b2 = torch.zeros(2, requires_grad=True)
     with torch.no_grad():
-        W1.mul_(0.5); W2.mul_(0.5)
+        W1.mul_(0.5)
+        W2.mul_(0.5)
     params = [W1, b1, W2, b2]
     for _ in range(steps):
         h = torch.relu(X_t @ W1 + b1)
         logits = h @ W2 + b2
         loss = torch.nn.functional.cross_entropy(logits, y_t)
         for p in params:
-            if p.grad is not None: p.grad.zero_()
+            if p.grad is not None:
+                p.grad.zero_()
         loss.backward()
         with torch.no_grad():
-            for p in params: p -= lr * p.grad
+            for p in params:
+                p -= lr * p.grad
     return [p.detach().clone() for p in params]
 
 
@@ -69,21 +73,37 @@ def main() -> None:
     W1, b1, W2, b2 = train_mlp(X, y, hidden=8, lr=0.1, steps=1500)
 
     # Grid for decision regions
-    xmin, xmax = X[:,0].min()-0.4, X[:,0].max()+0.4
-    ymin, ymax = X[:,1].min()-0.4, X[:,1].max()+0.4
-    xx, yy = np.meshgrid(np.linspace(xmin, xmax, 250), np.linspace(ymin, ymax, 250))
+    xmin, xmax = X[:, 0].min() - 0.4, X[:, 0].max() + 0.4
+    ymin, ymax = X[:, 1].min() - 0.4, X[:, 1].max() + 0.4
+    xx, yy = np.meshgrid(
+        np.linspace(xmin, xmax, 250),
+        np.linspace(ymin, ymax, 250),
+    )
     grid = np.c_[xx.ravel(), yy.ravel()]
     zz_lin = lin.predict(grid).reshape(xx.shape)
     zz_mlp = predict_mlp(grid, W1, b1, W2, b2).reshape(xx.shape)
 
     fig, axes = plt.subplots(1, 2, figsize=(8.4, 3.6), sharex=True, sharey=True)
-    for ax, zz, title in zip(axes, [zz_lin, zz_mlp], ['Linear', '2-layer MLP (ReLU)']):
-        ax.contourf(xx, yy, zz, levels=[-0.5,0.5,1.5], cmap='coolwarm', alpha=0.25)
-        ax.scatter(X[y==0,0], X[y==0,1], s=10, label='0')
-        ax.scatter(X[y==1,0], X[y==1,1], s=10, label='1')
+    for ax, zz, title in zip(
+        axes,
+        [zz_lin, zz_mlp],
+        ["Linear", "2-layer MLP (ReLU)"],
+    ):
+        ax.contourf(
+            xx,
+            yy,
+            zz,
+            levels=[-0.5, 0.5, 1.5],
+            cmap="coolwarm",
+            alpha=0.25,
+        )
+        ax.scatter(X[y == 0, 0], X[y == 0, 1], s=10, label="0")
+        ax.scatter(X[y == 1, 0], X[y == 1, 1], s=10, label="1")
         ax.set_title(title)
         ax.legend(frameon=False)
-    fig.tight_layout(); fig.savefig(out, format='svg')
+    fig.tight_layout()
+    fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

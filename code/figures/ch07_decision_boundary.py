@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 7 — Decision boundary for trained tiny MLP on moons (SVG).
 
@@ -18,6 +18,7 @@ plt.style.use('seaborn-v0_8')
 import torch
 from sklearn.datasets import make_moons
 from sklearn.model_selection import train_test_split
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -62,6 +63,7 @@ def main() -> None:
     ax.scatter(X[y==1,0], X[y==1,1], s=10, label='1')
     ax.legend(frameon=False)
     fig.tight_layout(); fig.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

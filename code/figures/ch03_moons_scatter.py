@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Two-moons dataset scatter (SVG).
 
@@ -15,6 +15,7 @@ from sklearn.datasets import make_moons
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -29,6 +30,7 @@ def main() -> None:
         ax.scatter(X[idx, 0], X[idx, 1], marker=marker, s=20, alpha=0.9, label=label)
     ax.set_xlabel("x1"); ax.set_ylabel("x2"); ax.legend(frameon=False)
     fig.tight_layout(); fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

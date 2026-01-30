@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 6 — Activation demo (sigmoid, tanh, ReLU outputs).
 

@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Appendix A — Generate a scatter SVG demonstrating a broadcasted transform.
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -33,6 +34,7 @@ def main() -> None:
     plt.scatter(pts2[:,0], pts2[:,1], s=15, alpha=0.5, label='broadcasted')
     plt.axis('equal'); plt.legend(frameon=False)
     plt.tight_layout(); plt.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

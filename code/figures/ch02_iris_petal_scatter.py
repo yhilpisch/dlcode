@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Generate SVG figure for Chapter 2: Iris petal length/width scatter.
 
@@ -16,6 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-v0_8')
 from sklearn import datasets
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -39,6 +40,7 @@ def main() -> None:
     plt.legend(frameon=False)
     plt.tight_layout()
     plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

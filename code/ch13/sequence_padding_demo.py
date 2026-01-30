@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Tiny, self-contained demo of tokenization, ID mapping, and padding/truncation
 to a fixed length. Mirrors the Chapter 13 intro.

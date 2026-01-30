@@ -1,38 +1,46 @@
+# Python bytecode and caches
+*.pt
+.executed/
 __pycache__/
 *.py[cod]
 *.pyo
-*.pyd
-.Python
-*.so
-.venv/
-venv/
-ENV/
-env/
-.env
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-coverage.xml
-htmlcov/
 
-# Jupyter
+# Jupyter/IPython
 .ipynb_checkpoints/
-**/.executed/
+.ipython/
+.jupyter/
 
-# OS / Editors
+# OS/editor noise
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
 
-# Data / Artifacts (optional)
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+.env.*
+.python-version
+
+# Build/dist artifacts
+build/
+dist/
+*.egg-info/
+
+# Coverage/CI artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Project data and generated outputs
 data/
 outputs/
 checkpoints/
-*.pt
 logs/
-
-# Node (if any notebooks use JS widgets)
-node_modules/
-package-lock.json
-package.json
+figures/

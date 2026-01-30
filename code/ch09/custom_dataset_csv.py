@@ -1,11 +1,12 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 9 — Example custom Dataset that reads a CSV.
 
-Note: This is a listing for Appendix F; it demonstrates structure without requiring a CSV in the repo.
+Note: This is a listing for Appendix F; it demonstrates structure without
+requiring a CSV in the repo.
 """
 from __future__ import annotations
 

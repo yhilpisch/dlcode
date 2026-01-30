@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Confusion matrix for logistic regression on moons (SVG).
 
@@ -19,6 +19,7 @@ from sklearn.datasets import make_moons
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -36,15 +37,25 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=(4.6, 3.4))
     im = ax.imshow(cm, interpolation='nearest', cmap='coolwarm')
     ax.set_title("Logistic regression — moons")
-    ax.set_xticks([0, 1], labels=["0", "1"]) 
-    ax.set_yticks([0, 1], labels=["0", "1"]) 
-    ax.set_xlabel('Predicted label')
-    ax.set_ylabel('True label')
+    ax.set_xticks([0, 1], labels=["0", "1"])
+    ax.set_yticks([0, 1], labels=["0", "1"])
+    ax.set_xlabel("Predicted label")
+    ax.set_ylabel("True label")
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
-            ax.text(j, i, cm[i, j], ha='center', va='center', color='black', fontsize=12)
+            ax.text(
+                j,
+                i,
+                cm[i, j],
+                ha="center",
+                va="center",
+                color="black",
+                fontsize=12,
+            )
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    fig.tight_layout(); fig.savefig(out, format='svg')
+    fig.tight_layout()
+    fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

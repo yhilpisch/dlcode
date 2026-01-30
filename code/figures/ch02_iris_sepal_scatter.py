@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Generate SVG figure for Chapter 2: Iris sepal length/width scatter.
 
@@ -15,6 +15,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn import datasets
+from code.figures._save import save_png_pdf
 
 plt.style.use('seaborn-v0_8')
 
@@ -40,6 +41,7 @@ def main() -> None:
     plt.legend(frameon=False)
     plt.tight_layout()
     plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

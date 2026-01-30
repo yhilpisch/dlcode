@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Distance concentration with increasing dimension (SVG).
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -45,6 +46,7 @@ def main() -> None:
     plt.xlabel('dimension d'); plt.ylabel('relative contrast (avg)')
     plt.title('Distance contrast shrinks as dimension grows')
     plt.tight_layout(); plt.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

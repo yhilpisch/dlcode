@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Estimate distance contrast as dimensionality grows.
 
@@ -13,9 +13,15 @@ from __future__ import annotations
 import numpy as np
 
 
-def relative_contrast(dim: int, rng: np.random.Generator, n_points: int = 2000, sample: int = 120) -> float:
-    """
-    Return the relative contrast (max - min) / min of pairwise distances for a set of sampled anchors.
+def relative_contrast(
+    dim: int,
+    rng: np.random.Generator,
+    n_points: int = 2000,
+    sample: int = 120,
+) -> float:
+    """Return the relative contrast (max - min) / min of pairwise distances.
+
+    The contrast is computed from pairwise distances for sampled anchors.
     """
     X = rng.random((n_points, dim))
     anchors = rng.choice(n_points, size=min(sample, n_points - 1), replace=False)

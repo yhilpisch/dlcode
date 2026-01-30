@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 9 — Standardization scatter (raw vs standardized) (SVG).
 
@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 plt.style.use('seaborn-v0_8')
 from sklearn.datasets import make_moons
 from sklearn.preprocessing import StandardScaler
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -35,6 +36,7 @@ def main() -> None:
             ax.set_xlim(xmin, xmax); ax.set_ylim(ymin, ymax)
         ax.legend(frameon=False)
     fig.tight_layout(); fig.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 if __name__=='__main__':

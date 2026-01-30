@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Residual pattern under model mis-specification (SVG).
 
@@ -16,6 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-v0_8')
 from numpy.linalg import lstsq
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -38,6 +39,7 @@ def main() -> None:
     plt.xlabel('x'); plt.ylabel('residual (y - y_linear)')
     plt.title('Curved residual pattern indicates mis-specification')
     plt.tight_layout(); plt.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

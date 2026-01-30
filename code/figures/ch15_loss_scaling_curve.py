@@ -1,12 +1,13 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 """
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -22,15 +23,22 @@ def main() -> None:
 
     fig, ax = plt.subplots(figsize=(6.4, 2.2))
     ax.plot(steps, scale, color="#1f77b4", lw=1.8)
-    ax.scatter(steps[overflows], scale[overflows], color="#d62728", s=18, zorder=3, label="overflow")
+    ax.scatter(
+        steps[overflows],
+        scale[overflows],
+        color="#d62728",
+        s=18,
+        zorder=3,
+        label="overflow",
+    )
     ax.set_xlabel("step")
     ax.set_ylabel("loss scale")
     ax.legend(frameon=False, loc="upper right", fontsize=9)
     ax.grid(True, ls=":", lw=0.5, alpha=0.6)
     fig.tight_layout()
     fig.savefig(out, bbox_inches="tight")
+    save_png_pdf(out)
 
 
 if __name__ == "__main__":
     main()
-

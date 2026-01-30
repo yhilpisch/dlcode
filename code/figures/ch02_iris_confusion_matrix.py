@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Generate SVG confusion matrix for Chapter 2 (Iris, petal features).
 
@@ -20,6 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
+from code.figures._save import save_png_pdf
 
 plt.style.use('seaborn-v0_8')
 
@@ -55,6 +56,7 @@ def main() -> None:
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     fig.tight_layout()
     plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

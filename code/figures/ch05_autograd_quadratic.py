@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 5 — Quadratic with gradient and descent steps (SVG).
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -33,18 +34,27 @@ def main() -> None:
     plt.figure(figsize=(5.0, 3.4))
     plt.plot(xs, f(xs), label='f(w)=(w-2)^2')
     ys = f(np.array(ws))
-    plt.scatter(ws, ys, c=np.arange(len(ws)), cmap='viridis', label='GD steps', zorder=3)
+    plt.scatter(
+        ws,
+        ys,
+        c=np.arange(len(ws)),
+        cmap="viridis",
+        label="GD steps",
+        zorder=3,
+    )
     for w, y in zip(ws, ys):
         m = df(w)
         xx = np.array([w - 0.6, w + 0.6])
         plt.plot(xx, m * (xx - w) + y, color='gray', lw=1, alpha=0.6)
-    plt.xlabel('w'); plt.ylabel('f(w)')
+    plt.xlabel("w")
+    plt.ylabel("f(w)")
     plt.title('Quadratic, gradient, and GD steps')
     plt.legend(frameon=False)
-    plt.tight_layout(); plt.savefig(out, format='svg')
+    plt.tight_layout()
+    plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 
 if __name__ == '__main__':
     main()
-

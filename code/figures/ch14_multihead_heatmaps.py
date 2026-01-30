@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 14 — Multi-head attention stacked heatmaps (clean)
 
@@ -14,18 +14,21 @@ from __future__ import annotations
 
 import numpy as np
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 
 
 def _apply_style():
-    plt.rcParams.update({
-        "figure.dpi": 120,
-        "font.size": 9,
-        "axes.titlesize": 9,
-        "axes.labelsize": 9,
-        "xtick.labelsize": 8,
-        "ytick.labelsize": 8,
-        "legend.fontsize": 8,
-    })
+    plt.rcParams.update(
+        {
+            "figure.dpi": 120,
+            "font.size": 9,
+            "axes.titlesize": 9,
+            "axes.labelsize": 9,
+            "xtick.labelsize": 8,
+            "ytick.labelsize": 8,
+            "legend.fontsize": 8,
+        }
+    )
 
 
 def softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
@@ -60,7 +63,14 @@ def main(out: str = "figures/ch14_multihead_heatmaps.svg") -> None:
 
     # 2x2 grid of heads (assumes h>=4; if fewer, fill available)
     nrows, ncols = 2, 2
-    fig, axes = plt.subplots(nrows, ncols, figsize=(4.4, 3.6), constrained_layout=True, sharex=True, sharey=True)
+    fig, axes = plt.subplots(
+        nrows,
+        ncols,
+        figsize=(4.4, 3.6),
+        constrained_layout=True,
+        sharex=True,
+        sharey=True,
+    )
     v_max = float(A.max())
     for idx in range(min(h, nrows * ncols)):
         r, c = divmod(idx, ncols)
@@ -70,19 +80,26 @@ def main(out: str = "figures/ch14_multihead_heatmaps.svg") -> None:
         ax.set_ylabel("query i")
         if r == nrows - 1:
             ax.set_xlabel("key j")
-        ax.set_xticks(np.arange(-.5, T, 1), minor=True)
-        ax.set_yticks(np.arange(-.5, T, 1), minor=True)
-        ax.grid(which="minor", color="#dddddd", linestyle="-", linewidth=0.4, alpha=0.6)
+        ax.set_xticks(np.arange(-0.5, T, 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, T, 1), minor=True)
+        ax.grid(
+            which="minor",
+            color="#dddddd",
+            linestyle="-",
+            linewidth=0.4,
+            alpha=0.6,
+        )
     # If extra subplots exist (h<4), hide unused axes
     for idx in range(h, nrows * ncols):
         r, c = divmod(idx, ncols)
-        axes[r, c].axis('off')
+        axes[r, c].axis("off")
 
     fig.savefig(out, bbox_inches="tight")
-    png_path = out[:-4] + '.png' if out.endswith('.svg') else out + '.png'
+    png_path = out[:-4] + ".png" if out.endswith(".svg") else out + ".png"
     fig.savefig(png_path, bbox_inches="tight", dpi=300)
     print(f"Saved {out} and {png_path}")
     fig.savefig(out, bbox_inches="tight")
+    save_png_pdf(out)
     print(f"Saved {out}")
 
 

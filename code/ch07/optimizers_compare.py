@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 7 — Compare SGD and Adam on moons.
 
@@ -31,15 +31,22 @@ def run(opt_name: str, lr: float, steps: int = 400) -> float:
     b2 = torch.zeros(2, requires_grad=True)
     params = [W1, b1, W2, b2]
     with torch.no_grad():
-        W1.mul_(0.5); W2.mul_(0.5)
-    opt = torch.optim.SGD(params, lr=lr) if opt_name == "sgd" else torch.optim.Adam(params, lr=lr)
+        W1.mul_(0.5)
+        W2.mul_(0.5)
+    if opt_name == "sgd":
+        opt = torch.optim.SGD(params, lr=lr)
+    else:
+        opt = torch.optim.Adam(params, lr=lr)
     for _ in range(steps):
         h = torch.relu(X_tr @ W1 + b1)
         logits = h @ W2 + b2
         loss = torch.nn.functional.cross_entropy(logits, y_tr)
-        opt.zero_grad(); loss.backward(); opt.step()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
     with torch.no_grad():
-        acc = ( (torch.relu(X_te @ W1 + b1) @ W2 + b2).argmax(dim=1) == y_te).float().mean().item()
+        logits = torch.relu(X_te @ W1 + b1) @ W2 + b2
+        acc = (logits.argmax(dim=1) == y_te).float().mean().item()
     return acc
 
 
@@ -51,4 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

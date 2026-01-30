@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Appendix B — Generate Binomial(n=10,p=0.3) PMF SVG.
 
@@ -15,6 +15,7 @@ from math import comb
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -31,6 +32,7 @@ def main() -> None:
     ax.set_xlabel('k (successes)'); ax.set_ylabel('P(X=k)')
     ax.set_title(f'Binomial(n={n}, p={p}) PMF')
     fig.tight_layout(); fig.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

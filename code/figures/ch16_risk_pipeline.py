@@ -1,11 +1,12 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 """
 from pathlib import Path
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -24,7 +25,14 @@ def main() -> None:
         x = x0 + i * 0.19
         rect = plt.Rectangle((x, y_box), box_w, box_h, ec="#444", fc="#eef5ff")
         ax.add_patch(rect)
-        ax.text(x + box_w/2, y_box + box_h/2, s, ha="center", va="center", fontsize=10)
+        ax.text(
+            x + box_w / 2,
+            y_box + box_h / 2,
+            s,
+            ha="center",
+            va="center",
+            fontsize=10,
+        )
         if i < len(stages) - 1:
             x_left = x + box_w + 0.01
             x_right = x + box_w + 0.08
@@ -44,11 +52,12 @@ def main() -> None:
         "guardrails, feedback",
     ]
     for i, text in enumerate(callouts):
-        x = x0 + i * 0.19 + box_w/2
+        x = x0 + i * 0.19 + box_w / 2
         ax.text(x, 0.24, text, ha="center", fontsize=9)
 
     fig.tight_layout()
     fig.savefig(out, bbox_inches="tight")
+    save_png_pdf(out)
 
 
 if __name__ == "__main__":

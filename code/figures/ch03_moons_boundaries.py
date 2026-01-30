@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Decision boundaries on moons: Logistic vs RBF SVM (SVG).
 
@@ -19,6 +19,7 @@ from sklearn.pipeline import make_pipeline
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -55,6 +56,7 @@ def main() -> None:
     for ax in axes:
         ax.legend(frameon=False, loc="upper right")
     fig.tight_layout(); fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

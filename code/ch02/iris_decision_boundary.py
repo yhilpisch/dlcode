@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 2 — Decision boundary plot for Iris using two features.
 
@@ -29,12 +29,22 @@ def main() -> None:
 
     xmin, xmax = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
     ymin, ymax = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
-    xx, yy = np.meshgrid(np.linspace(xmin, xmax, 200), np.linspace(ymin, ymax, 200))
+    xx, yy = np.meshgrid(
+        np.linspace(xmin, xmax, 200),
+        np.linspace(ymin, ymax, 200),
+    )
     grid = np.c_[xx.ravel(), yy.ravel()]
     zz = pipe.predict(grid).reshape(xx.shape)
 
     plt.figure(figsize=(4, 3))
-    plt.contourf(xx, yy, zz, alpha=0.2, levels=[-0.5, 0.5, 1.5, 2.5], cmap="coolwarm")
+    plt.contourf(
+        xx,
+        yy,
+        zz,
+        alpha=0.2,
+        levels=[-0.5, 0.5, 1.5, 2.5],
+        cmap="coolwarm",
+    )
     for cls, marker, label in [
         (0, "o", iris.target_names[0]),
         (1, "s", iris.target_names[1]),

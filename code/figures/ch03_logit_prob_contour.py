@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Probability contour for logistic regression on moons (SVG).
 
@@ -27,6 +27,7 @@ from sklearn.datasets import make_moons
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -40,9 +41,13 @@ def main() -> None:
     xmin, xmax = X[:, 0].min() - 0.6, X[:, 0].max() + 0.6
     ymin, ymax = X[:, 1].min() - 0.6, X[:, 1].max() + 0.6
     # Slightly lower grid resolution to be lighter in restricted sandboxes
-    xx, yy = np.meshgrid(np.linspace(xmin, xmax, 200), np.linspace(ymin, ymax, 200))
+    xx, yy = np.meshgrid(
+        np.linspace(xmin, xmax, 200),
+        np.linspace(ymin, ymax, 200),
+    )
     grid = np.c_[xx.ravel(), yy.ravel()]
-    # Compute probabilities manually to avoid heavy predict_proba calls in sandboxed envs
+    # Compute probabilities manually to avoid heavy predict_proba calls
+    # in sandboxed environments.
     scaler = clf_pipe.named_steps['standardscaler']
     lr = clf_pipe.named_steps['logisticregression']
     grid_std = (grid - scaler.mean_) / scaler.scale_
@@ -50,14 +55,25 @@ def main() -> None:
     proba = (1.0 / (1.0 + np.exp(-logits))).reshape(xx.shape)
 
     fig, ax = plt.subplots(figsize=(4.8, 3.4))
-    cs = ax.contourf(xx, yy, proba, levels=21, cmap='coolwarm', alpha=0.8)
-    ax.contour(xx, yy, proba, levels=[0.5], colors='k', linewidths=1.2)
-    for cls, marker, label in [(0, 'o', 'class 0'), (1, '^', 'class 1')]:
+    cs = ax.contourf(xx, yy, proba, levels=21, cmap="coolwarm", alpha=0.8)
+    ax.contour(xx, yy, proba, levels=[0.5], colors="k", linewidths=1.2)
+    for cls, marker, label in [(0, "o", "class 0"), (1, "^", "class 1")]:
         idx = y == cls
-        ax.scatter(X[idx, 0], X[idx, 1], marker=marker, s=18, alpha=0.9, label=label)
-    fig.colorbar(cs, ax=ax, fraction=0.046, pad=0.04, label='P(class=1)')
-    ax.set_xlabel('x1'); ax.set_ylabel('x2'); ax.legend(frameon=False, loc='upper right')
-    fig.tight_layout(); fig.savefig(out, format='svg')
+        ax.scatter(
+            X[idx, 0],
+            X[idx, 1],
+            marker=marker,
+            s=18,
+            alpha=0.9,
+            label=label,
+        )
+    fig.colorbar(cs, ax=ax, fraction=0.046, pad=0.04, label="P(class=1)")
+    ax.set_xlabel("x1")
+    ax.set_ylabel("x2")
+    ax.legend(frameon=False, loc="upper right")
+    fig.tight_layout()
+    fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

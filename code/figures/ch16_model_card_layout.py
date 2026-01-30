@@ -1,11 +1,12 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 """
 from pathlib import Path
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -30,6 +31,7 @@ def main() -> None:
 
     fig.tight_layout()
     fig.savefig(out, bbox_inches="tight")
+    save_png_pdf(out)
 
 
 if __name__ == "__main__":

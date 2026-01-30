@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Polynomial feature count growth (SVG).
 
@@ -15,13 +15,14 @@ import math
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
 def poly_feature_count(d: int, degree: int) -> int:
     # Number of polynomial features with interaction_only=False, include_bias=False
-    # equals C(d + degree, degree) - 1 (excluding bias), summed across degrees 1..degree
-    # Efficiently compute using combinations with replacement formula.
+    # equals C(d + degree, degree) - 1 (excluding bias), summed across degrees
+    # 1..degree. Efficiently compute using combinations with replacement formula.
     total = 0
     for k in range(1, degree + 1):
         total += math.comb(d + k - 1, k)
@@ -39,12 +40,14 @@ def main() -> None:
     plt.figure(figsize=(5.0, 3.2))
     plt.plot(degrees, counts, marker='o')
     plt.yscale('log')
-    plt.xlabel('polynomial degree K'); plt.ylabel('# features (log scale)')
+    plt.xlabel("polynomial degree K")
+    plt.ylabel("# features (log scale)")
     plt.title(f'Polynomial features explode (d={d})')
-    plt.tight_layout(); plt.savefig(out, format='svg')
+    plt.tight_layout()
+    plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 
 if __name__ == '__main__':
     main()
-

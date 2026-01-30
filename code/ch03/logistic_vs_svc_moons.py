@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Logistic regression vs RBF SVC on moons.
 
@@ -26,7 +26,10 @@ def main() -> None:
     )
 
     logit = make_pipeline(StandardScaler(), LogisticRegression()).fit(X_tr, y_tr)
-    rbf = make_pipeline(StandardScaler(), SVC(kernel="rbf", C=1.0, gamma="scale")).fit(X_tr, y_tr)
+    rbf = make_pipeline(
+        StandardScaler(),
+        SVC(kernel="rbf", C=1.0, gamma="scale"),
+    ).fit(X_tr, y_tr)
 
     print("Logistic acc=", round(accuracy_score(y_te, logit.predict(X_te)), 3))
     print("RBF SVC acc=", round(accuracy_score(y_te, rbf.predict(X_te)), 3))
@@ -34,4 +37,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

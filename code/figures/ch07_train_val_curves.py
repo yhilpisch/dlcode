@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 7 — Train/validation curves for tiny MLP on moons (SVG).
 
@@ -18,6 +18,7 @@ plt.style.use('seaborn-v0_8')
 import torch
 from sklearn.datasets import make_moons
 from sklearn.model_selection import train_test_split
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -40,7 +41,8 @@ def main() -> None:
     W2 = torch.randn(16, 2, requires_grad=True)
     b2 = torch.zeros(2, requires_grad=True)
     with torch.no_grad():
-        W1.mul_(0.5); W2.mul_(0.5)
+        W1.mul_(0.5)
+        W2.mul_(0.5)
     params = [W1, b1, W2, b2]
 
     def forward(X: torch.Tensor) -> torch.Tensor:
@@ -71,14 +73,22 @@ def main() -> None:
             val_loss.append(float(loss_fn(val_logits, y_val).detach()))
             val_acc.append(accuracy(val_logits, y_val))
     fig, axes = plt.subplots(1, 3, figsize=(10.2, 3.2))
-    e = range(1, epochs+1)
-    axes[0].plot(e, train_loss, marker='o')
-    axes[0].set_xlabel('epoch'); axes[0].set_ylabel('train loss'); axes[0].set_title('Train loss')
-    axes[1].plot(e, val_loss, marker='o', color='C1')
-    axes[1].set_xlabel('epoch'); axes[1].set_ylabel('val loss'); axes[1].set_title('Validation loss')
-    axes[2].plot(e, val_acc, marker='o', color='C2')
-    axes[2].set_xlabel('epoch'); axes[2].set_ylabel('val accuracy'); axes[2].set_title('Validation accuracy')
-    fig.tight_layout(); fig.savefig(out, format='svg')
+    e = range(1, epochs + 1)
+    axes[0].plot(e, train_loss, marker="o")
+    axes[0].set_xlabel("epoch")
+    axes[0].set_ylabel("train loss")
+    axes[0].set_title("Train loss")
+    axes[1].plot(e, val_loss, marker="o", color="C1")
+    axes[1].set_xlabel("epoch")
+    axes[1].set_ylabel("val loss")
+    axes[1].set_title("Validation loss")
+    axes[2].plot(e, val_acc, marker="o", color="C2")
+    axes[2].set_xlabel("epoch")
+    axes[2].set_ylabel("val accuracy")
+    axes[2].set_title("Validation accuracy")
+    fig.tight_layout()
+    fig.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

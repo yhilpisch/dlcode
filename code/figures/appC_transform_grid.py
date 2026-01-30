@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Appendix C — Visualize a 2x2 linear map acting on a grid and unit circle.
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -47,6 +48,7 @@ def main() -> None:
     ax.set_xlim(-3.0, 3.0); ax.set_ylim(-3.0, 3.0)
     ax.set_xlabel('x'); ax.set_ylabel('y'); ax.legend(frameon=False)
     fig.tight_layout(); fig.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

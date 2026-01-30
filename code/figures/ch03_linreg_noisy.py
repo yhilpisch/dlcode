@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 3 — Linear regression on noisy data (SVG).
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -38,6 +39,7 @@ def main() -> None:
     plt.plot(xx, yy, 'r-', lw=2, label='fit')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(frameon=False)
     plt.tight_layout(); plt.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

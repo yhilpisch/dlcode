@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Model complexity curve for Decision Tree on moons (SVG).
 
@@ -18,6 +18,7 @@ plt.style.use('seaborn-v0_8')
 from sklearn.datasets import make_moons
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -44,6 +45,7 @@ def main() -> None:
     plt.title('Under/overfitting across model complexity (tree depth)')
     plt.legend(frameon=False)
     plt.tight_layout(); plt.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

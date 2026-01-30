@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Appendix B — Generate standard normal PDF SVG.
 
@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 
@@ -29,6 +30,7 @@ def main() -> None:
     ax.set_xlabel('x'); ax.set_ylabel('density')
     ax.set_title('Standard normal PDF')
     fig.tight_layout(); fig.savefig(out, format='svg')
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 

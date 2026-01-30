@@ -35,7 +35,9 @@ def make_xor_dataset() -> tuple[np.ndarray, np.ndarray]:
     return X, y
 
 
-def fit_models(X: np.ndarray, y: np.ndarray) -> tuple[LogisticRegression, MLPClassifier]:
+def fit_models(
+    X: np.ndarray, y: np.ndarray
+) -> tuple[LogisticRegression, MLPClassifier]:
     """Fit a linear classifier and a two-layer ReLU MLP to XOR."""
     linear = LogisticRegression(
         penalty=None,

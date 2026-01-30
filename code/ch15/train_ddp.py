@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Minimal DDP training template with AMP, gradient accumulation, and resumable
 checkpoints. Launch with torchrun, e.g.:
@@ -48,7 +48,9 @@ class ToyDataset(Dataset):
     def __len__(self) -> int:  # type: ignore[override]
         return self.X.size(0)
 
-    def __getitem__(self, i: int) -> Tuple[torch.Tensor, int]:  # type: ignore[override]
+    def __getitem__(
+        self, i: int
+    ) -> Tuple[torch.Tensor, int]:  # type: ignore[override]
         return self.X[i], int(self.y[i])
 
 
@@ -56,7 +58,9 @@ class TinyNet(nn.Module):
     def __init__(self, d: int = 64, h: int = 128, k: int = 2) -> None:
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(d, h), nn.ReLU(), nn.Linear(h, k)
+            nn.Linear(d, h),
+            nn.ReLU(),
+            nn.Linear(h, k),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:  # type: ignore[override]
@@ -84,15 +88,23 @@ def is_main() -> bool:
     return rank() == 0
 
 
-def save_ckpt(path: Path, model: nn.Module, opt: torch.optim.Optimizer, epoch: int) -> None:
+def save_ckpt(
+    path: Path,
+    model: nn.Module,
+    opt: torch.optim.Optimizer,
+    epoch: int,
+) -> None:
     to_save = model.module if isinstance(model, DDP) else model
     if is_main():
         path.parent.mkdir(parents=True, exist_ok=True)
-        torch.save({
-            "model": to_save.state_dict(),
-            "opt": opt.state_dict(),
-            "epoch": epoch,
-        }, path)
+        torch.save(
+            {
+                "model": to_save.state_dict(),
+                "opt": opt.state_dict(),
+                "epoch": epoch,
+            },
+            path,
+        )
     if dist.is_initialized():
         dist.barrier()
 
@@ -127,8 +139,17 @@ def train(cfg: Config) -> None:
     ds_train = ToyDataset(n=20_000)
     ds_val = ToyDataset(n=4_000, seed=1)
 
-    sampler = distributed.DistributedSampler(ds_train) if dist.is_initialized() else None
-    loader = DataLoader(ds_train, batch_size=cfg.batch, sampler=sampler, shuffle=(sampler is None), num_workers=2, pin_memory=True)
+    sampler = (
+        distributed.DistributedSampler(ds_train) if dist.is_initialized() else None
+    )
+    loader = DataLoader(
+        ds_train,
+        batch_size=cfg.batch,
+        sampler=sampler,
+        shuffle=(sampler is None),
+        num_workers=2,
+        pin_memory=True,
+    )
     loader_val = DataLoader(ds_val, batch_size=1024, shuffle=False)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -141,7 +162,9 @@ def train(cfg: Config) -> None:
 
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr)
     loss_fn = nn.CrossEntropyLoss()
-    scaler = torch.cuda.amp.GradScaler(enabled=(cfg.amp and device.type == "cuda"))
+    scaler = torch.cuda.amp.GradScaler(
+        enabled=(cfg.amp and device.type == "cuda")
+    )
 
     start_epoch = load_ckpt(cfg.ckpt, model, opt)
 
@@ -154,7 +177,9 @@ def train(cfg: Config) -> None:
         for it, (xb, yb) in enumerate(loader):
             xb = xb.to(device, non_blocking=True)
             yb = yb.to(device, non_blocking=True)
-            with torch.cuda.amp.autocast(enabled=(cfg.amp and device.type == "cuda")):
+            with torch.cuda.amp.autocast(
+                enabled=(cfg.amp and device.type == "cuda")
+            ):
                 loss = loss_fn(model(xb), yb) / max(cfg.accum, 1)
             scaler.scale(loss).backward()
             if (it + 1) % cfg.accum == 0:
@@ -165,8 +190,12 @@ def train(cfg: Config) -> None:
 
         # eval on rank 0 for brevity
         if is_main():
-            acc = evaluate(model.module if isinstance(model, DDP) else model, loader_val)
-            print(f"epoch {epoch}: loss={running/(it+1):.4f} val_acc={acc:.3f}")
+            acc = evaluate(
+                model.module if isinstance(model, DDP) else model, loader_val
+            )
+            print(
+                f"epoch {epoch}: loss={running/(it + 1):.4f} val_acc={acc:.3f}"
+            )
         save_ckpt(cfg.ckpt, model, opt, epoch)
 
     if dist.is_initialized():
@@ -180,9 +209,18 @@ def parse_args() -> Config:
     p.add_argument("--lr", type=float, default=3e-4)
     p.add_argument("--accum", type=int, default=1)
     p.add_argument("--amp", action="store_true")
-    p.add_argument("--ckpt", type=Path, default=Path("checkpoints/ch15_ddp.pt"))
+    p.add_argument(
+        "--ckpt", type=Path, default=Path("checkpoints/ch15_ddp.pt")
+    )
     a = p.parse_args()
-    return Config(epochs=a.epochs, batch=a.batch, lr=a.lr, accum=a.accum, amp=a.amp, ckpt=a.ckpt)
+    return Config(
+        epochs=a.epochs,
+        batch=a.batch,
+        lr=a.lr,
+        accum=a.accum,
+        amp=a.amp,
+        ckpt=a.ckpt,
+    )
 
 
 if __name__ == "__main__":

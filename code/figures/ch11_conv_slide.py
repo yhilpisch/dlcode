@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 11 — Convolution sliding demo
 
@@ -18,6 +18,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from code.figures._save import save_png_pdf
 plt.style.use('seaborn-v0_8')
 
 def conv2d_valid(x: np.ndarray, k: np.ndarray, stride: int = 1) -> np.ndarray:
@@ -74,5 +75,6 @@ def main() -> None:
     fig.tight_layout()
     fig.savefig(out_svg, format='svg')
     fig.savefig(out_png, dpi=200)
+    save_png_pdf(out_svg)
     print(f"Wrote {out_svg} and {out_png}")
 if __name__=='__main__': main()

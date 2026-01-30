@@ -1,9 +1,10 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
-Chapter 4 — Learning curve (train/test accuracy vs training size) for Logistic Regression on moons (SVG).
+Chapter 4 — Learning curve (train/test accuracy vs training size) for Logistic
+Regression on moons (SVG).
 
 Output: figures/ch04_learning_curve_logit.svg
 """
@@ -20,6 +21,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
+from code.figures._save import save_png_pdf
 
 
 def main() -> None:
@@ -45,13 +47,15 @@ def main() -> None:
     plt.figure(figsize=(5.2, 3.4))
     plt.plot(sizes, train_scores, label='train', marker='o')
     plt.plot(sizes, test_scores, label='test', marker='o')
-    plt.xlabel('training set size'); plt.ylabel('accuracy')
+    plt.xlabel("training set size")
+    plt.ylabel("accuracy")
     plt.title('Learning curve (logistic regression on moons)')
     plt.legend(frameon=False)
-    plt.tight_layout(); plt.savefig(out, format='svg')
+    plt.tight_layout()
+    plt.savefig(out, format="svg")
+    save_png_pdf(out)
     print(f"Wrote {out}")
 
 
 if __name__ == '__main__':
     main()
-

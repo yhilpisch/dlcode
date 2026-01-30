@@ -1,7 +1,7 @@
 """
 Deep Learning with PyTorch
 (c) Dr. Yves J. Hilpisch
-AI-Powered by GPT-5.
+AI-Powered by GPT-5.x.
 
 Chapter 4 — Learning curve for logistic regression on moons.
 
@@ -32,7 +32,11 @@ def main() -> None:
     )
 
     print("size,train_acc,test_acc")
-    for size, tr, te in zip(train_sizes, train_scores.mean(axis=1), test_scores.mean(axis=1)):
+    for size, tr, te in zip(
+        train_sizes,
+        train_scores.mean(axis=1),
+        test_scores.mean(axis=1),
+    ):
         print(f"{int(size)},{tr:.3f},{te:.3f}")
 
 
