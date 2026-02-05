@@ -57,17 +57,17 @@ import matplotlib.pyplot as plt
 outdir = r"{str(outdir)}"
 os.makedirs(outdir, exist_ok=True)
 _counter = {{'i': 0}}
+script_path = sys.argv[1]
+base = os.path.splitext(os.path.basename(script_path))[0]
 
 def _save_show(*a, **k):
     _counter['i'] += 1
-    base = os.path.splitext(os.path.basename(sys.argv[1]))[0]
     for num in plt.get_fignums():
         fn = os.path.join(outdir, f"{{base}}_{{_counter['i']:03d}}_{{num}}.png")
         plt.figure(num).savefig(fn, dpi=200)
     plt.close('all')
 
 plt.show = _save_show
-script_path = sys.argv[1]
 sys.argv = [script_path]
 runpy.run_path(script_path, run_name='__main__')
 """
